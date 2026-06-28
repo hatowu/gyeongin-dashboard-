@@ -89,6 +89,7 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
     <div class="sb-sec">예측 · 과제</div>
     <div class="sb-item" onclick="showPage('predict',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 20h20M5 20V10l7-7 7 7v10"/><path d="M9 20v-5h6v5"/></svg>6월 실적 예측</div>
     <div class="sb-item" onclick="showPage('task',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>과제 현황</div>
+    <div class="sb-item" onclick="showPage('budget',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>예산 현황</div>
     <div class="sb-sec">전략</div>
     <div class="sb-item" onclick="showPage('strategy',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5l4 4L7 21H3v-4z"/></svg>전략 관리</div>
   </div>
@@ -218,7 +219,11 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
       <div id="jik-grids"></div>
     </div>
   </div>
-  <div class="card" style="margin-top:14px">
+</div>
+
+<!-- 예산 현황 -->
+<div class="page" id="page-budget">
+  <div class="card">
     <div class="sec-h">
       <span class="sec-t">활동비 배정/사용 현황</span>
       <span style="font-size:10px;color:var(--txt3)">단위: 만원</span>
@@ -293,11 +298,12 @@ function showPage(id,el){
   document.getElementById('page-'+id).classList.add('active');
   document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('active'));
   el.classList.add('active');
-  const ts={overview:'종합 현황',ranking:'전국 순위',person:'담당자별',product:'품목별',focus:'주요품목 집중관리',predict:'6월 실적 예측',task:'과제 현황',strategy:'전략 관리'};
+  const ts={overview:'종합 현황',ranking:'전국 순위',person:'담당자별',product:'품목별',focus:'주요품목 집중관리',predict:'6월 실적 예측',task:'과제 현황',budget:'예산 현황',strategy:'전략 관리'};
   document.getElementById('page-title').textContent=ts[id];
   renderAll();
   // focus 탭은 SVG가 innerHTML로 동적 생성되므로 DOM 확정 후 재렌더
   if(id==='focus') requestAnimationFrame(()=>renderFocus());
+  if(id==='budget') requestAnimationFrame(()=>renderDetail());
 }
 function setMonth(m,el){
   curMonth=m;
@@ -870,7 +876,6 @@ function renderTask(){
     return`<div style="margin-bottom:10px"><div style="font-size:12px;font-weight:600;color:${c};margin-bottom:8px">${office}</div>${rows}</div>`;
   });
   document.getElementById('jik-grids').innerHTML=jk.join('');
-  renderDetail();
 }
 
 // ── 전략
